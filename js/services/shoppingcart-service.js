@@ -102,6 +102,18 @@ class ShoppingCartService {
         this.cart.items.forEach(item => {
             this.buildItem(item, contentDiv)
         });
+
+        const checkoutDiv = document.createElement("div");
+        checkoutDiv.classList.add("checkout-div");
+
+        const checkoutButton = document.createElement("button");
+        checkoutButton.classList.add("btn")
+        checkoutButton.classList.add("btn-primary")
+        checkoutButton.innerText = "Checkout";
+        checkoutButton.addEventListener("click", () => this.placeOrder());
+        checkoutButton.disabled = this.cart.items.length === 0;
+        checkoutDiv.appendChild(checkoutButton)
+        contentDiv.append(checkoutDiv)
     }
 
     buildItem(item, parent)
@@ -184,6 +196,30 @@ class ShoppingCartService {
         catch (e) {
 
         }
+    }
+
+    placeOrder()
+    {
+        const url = `${config.baseUrl}/orders`;
+
+        axios.post(url)
+             .then(() => {
+                 const data = {
+                     message: "Order placed!"
+                 };
+
+                 templateBuilder.append("message", data, "errors")
+
+                 clearCart()
+             })
+             .catch(error => {
+
+                 const data = {
+                     error: "Error placing order"
+                 };
+
+                 templateBuilder.append("error", data, "errors")
+             })
     }
 }
 

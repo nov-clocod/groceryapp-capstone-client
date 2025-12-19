@@ -201,3 +201,7 @@ main > .content-form .cart-item
     margin-bottom: 2px !important;
 }
 
+.checkout-div {
+    text-align: right;
+    padding-top: 10px;
+}
